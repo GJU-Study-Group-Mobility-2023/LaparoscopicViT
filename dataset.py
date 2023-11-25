@@ -1,7 +1,7 @@
 import os 
 import cv2
 
-def process_frame(frame_number, tools_present, video_number):
+def process_frame(frame_number, tools_present, video_number, annotations_folder, videos_folder, output_folder):
     # Create a folder name based on tools present in the frame
     folder_name = '-'.join(sorted(tools_present))
     
@@ -48,7 +48,7 @@ def process_frame(frame_number, tools_present, video_number):
     # Release the video capture object
     cap.release()
 
-def process_txt_file(file_path, video_number):
+def process_txt_file(file_path, video_number, annotations_folder, videos_folder, output_folder):
     with open(file_path, 'r') as file:
         # Read the header to get the tool names
         header = file.readline().strip().split('\t')[1:]
@@ -61,9 +61,9 @@ def process_txt_file(file_path, video_number):
 
             # If there are tools present, process the frame
             if tools_present:
-                process_frame(frame_number, tools_present, video_number)
+                process_frame(frame_number, tools_present, video_number, annotations_folder, videos_folder, output_folder)
 
 def videos_to_ImageFolder(annotations_folder, videos_folder, output_folder):
     for video_number in range(1, 81):  # Assuming there are 80 videos
         txt_file_path = os.path.join(annotations_folder, f"video{video_number:02d}-tool.txt")
-        process_txt_file(txt_file_path, video_number)
+        process_txt_file(txt_file_path, video_number, annotations_folder, videos_folder, output_folder)
