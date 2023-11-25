@@ -1,34 +1,16 @@
 import os
-import argparse
 
-from data import Cholec80
+from dataset import videos_to_ImageFolder
 
-def setup_argparser():
-    parser = argparse.ArgumentParser(description='LaparoscopicViT')
-    parser.add_argument('--data-rootdir', type=str, required=True, help='Data root directory')
-    parser.add_argument('--verify_checksum', action='store_true', help='Verify integrity of downloaded data.')
-    
-    return parser
+# Specify the path to the tool annotations folder
+annotations_folder = "C:\\Users\\moham\\Desktop\\GJU\\dataset\\cholec80\\tool_annotations"
+# Specify the path to the videos folder
+videos_folder = "C:\\Users\\moham\\Desktop\\GJU\\dataset\\cholec80\\videos"
+# Specify the path to the output image folders
+output_folder = "C:\\Users\\moham\\Desktop\\GJU\\dataset\\cholec80ImageFolder"
 
-
-def main(args):
-    outfile = os.path.join(args.data_rootdir, "cholec80.tar.gz")
-    outdir = os.path.join(args.data_rootdir, "cholec80") 
-    
-    cholec80 = Cholec80(args)
-
-
-    if not os.path.exists(os.path.join(outdir, outfile)):
-        cholec80.download_data()
-        cholec80.file_extraction()
-
-    else:
-        print('Cholec80 dataset is already downloaded.')
-
-
-if __name__ == '__main__':
-    parser = setup_argparser()
-    parsed_args = parser.parse_args()
-    # /Volumes/SSD - 2TB
-    
-    main(parsed_args)
+if (os.path.isdir(output_folder)):
+    print("The folder already exists")
+else:
+    os.makedirs(output_folder, exist_ok=True)
+    videos_to_ImageFolder(annotations_folder, videos_folder, output_folder)
